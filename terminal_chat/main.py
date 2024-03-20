@@ -5,12 +5,17 @@ from langchain.prompts import (
     ChatPromptTemplate,
     MessagesPlaceholder,
 )
-from langchain.memory import ConversationBufferMemory
+from langchain.memory import ConversationBufferMemory, FileChatMessageHistory
 
 import os
+import sys
 
 chat = ChatOpenAI(openai_api_key=os.getenv("OPENAI_API_KEY"))
-memory = ConversationBufferMemory(memory_key="messages", return_messages=True)
+memory = ConversationBufferMemory(
+    chat_memory=FileChatMessageHistory("messages.json"),
+    memory_key="messages",
+    return_messages=True,
+)
 
 prompt = ChatPromptTemplate(
     input_variables=["content", "messages"],
@@ -23,7 +28,10 @@ prompt = ChatPromptTemplate(
 chain = LLMChain(llm=chat, prompt=prompt, memory=memory)
 
 while True:
+    print("What would you like to do?  Type exit to terminate.")
     content = input(">> ")
+    if content == "exit":
+        sys.exit(0)
 
     result = chain({"content": content})
     print(result["text"])
