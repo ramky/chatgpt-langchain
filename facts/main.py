@@ -23,10 +23,11 @@ if DEBUG:
 
 db = Chroma.from_documents(docs, embedding=embeddings, persist_directory="emb")
 
+
 prompt = "What is an interesting fact about the English language?"
-results = db.similarity_search_with_score(prompt, k=1)
+results = db.similarity_search(prompt)
 
 for result in results:
     print("\n")
-    # print(result[1])
-    print(result[0].page_content)
+    # print(result[1]) # displays embeeding score
+    print(result.page_content)
