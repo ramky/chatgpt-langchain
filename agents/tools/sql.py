@@ -27,7 +27,7 @@ run_query_tool = Tool.from_function(
 
 def describe_tables(table_names):
     c = conn.cursor()
-    tables = ". ".join("'" + table + "'" for table in table_names)
+    tables = ", ".join("'" + table + "'" for table in table_names)
     rows = c.execute(
         f"SELECT sql FROM sqlite_master WHERE type='table' and name IN ({tables});"
     )
