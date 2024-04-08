@@ -1,3 +1,4 @@
 *.json
 emb/
 *.html
+upload-server/uploads/*
