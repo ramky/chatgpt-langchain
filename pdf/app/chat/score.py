@@ -86,4 +86,17 @@ def get_scores():
         }
     """
 
-    pass
+    aggregate = {"llm": {}, "retriever": {}, "memory": {}}
+
+    for component_type in aggregate.keys():
+        values = client.hgetall(f"{component_type}_score_values")
+        counts = client.hgetall(f"{component_type}_score_counts")
+
+        names = values.keys()
+        for name in names:
+            score = int(values.get(name, 1))
+            count = int(counts.get(name, 1))
+            avg = score / count
+            aggregate[component_type][name] = [avg]
+
+    return aggregate
